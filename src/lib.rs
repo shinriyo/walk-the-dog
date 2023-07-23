@@ -60,6 +60,8 @@ pub fn main_js() -> Result<(), JsValue> {
     draw_triangle(&context, [(450.0, 300.0), (300.0, 600.0), (600.0, 600.0)]);
     */
 
+    let image = web_sys::HtmlImageElement::new().unwrap();
+    image.set_src("Idle (1).png");
     sirpinski(
       &context,
       [(300.0, 0.0), (0.0, 600.0), (600.0, 600.0)],
