@@ -81,8 +81,11 @@ fn sirpinski(context: &web_sys::CanvasRenderingContext2d,
 
     let depth = depth - 1;
     if depth > 0 {
-        draw_triangle(&context, [(300.0, 0.0), (150.00, 300.0), (450.0, 300.0)]);
-        draw_triangle(&context, [(150.0, 300.0), (0.0, 600.0), (300.0, 600.0)]);
-        draw_triangle(&context, [(450.0, 300.0), (300.0, 600.0), (600.0, 600.0)]);
+        // draw_triangle(&context, [(300.0, 0.0), (150.00, 300.0), (450.0, 300.0)]);
+        // draw_triangle(&context, [(150.0, 300.0), (0.0, 600.0), (300.0, 600.0)]);
+        // draw_triangle(&context, [(450.0, 300.0), (300.0, 600.0), (600.0, 600.0)]);
+        sirpinski(&context, [(300.0, 0.0), (150.00, 300.0), (450.0, 300.0)], depth);
+        sirpinski(&context, [(150.0, 300.0), (0.0, 600.0), (300.0, 600.0)], depth);
+        sirpinski(&context, [(450.0, 300.0), (300.0, 600.0), (600.0, 600.0)], depth);
     }
 }
