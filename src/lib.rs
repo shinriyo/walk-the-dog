@@ -59,15 +59,32 @@ pub fn main_js() -> Result<(), JsValue> {
     draw_triangle(&context, [(150.0, 300.0), (0.0, 600.0), (300.0, 600.0)]);
     draw_triangle(&context, [(450.0, 300.0), (300.0, 600.0), (600.0, 600.0)]);
     */
+    wasm_bindgen_futures::spawn_local(async move {
+        let image = web_sys::HtmlImageElement::new().unwrap();
+        // image.set_onload(|| {
+        //     web_sys::console::log_1(&JsValue::from_str("loaded"));
+        // });
+        let (success_tx, success_rx) = futures::channel::oneshot::channel::<()>();
+        let callback = Closure::once(||{
+            // web_sys::console::log_1(&JsValue::from_str("loaded"));
+            success_tx.send(());
+        });
+        image.set_onload(Some(callback.as_ref().unchecked_ref()));
+        // callback.forget();
+        image.set_src("Idle (1).png");
 
-    let image = web_sys::HtmlImageElement::new().unwrap();
-    image.set_src("Idle (1).png");
-    sirpinski(
-      &context,
-      [(300.0, 0.0), (0.0, 600.0), (600.0, 600.0)],
-      (0, 255, 0),
-      5
-    );
+        success_rx.await;
+        context.draw_image_with_html_image_element(&image, 0.0, 0.0);
+
+
+        sirpinski(
+            &context,
+            [(300.0, 0.0), (0.0, 600.0), (600.0, 600.0)],
+            (0, 255, 0),
+            5
+        );
+    });
+
     Ok(())
 }
 
