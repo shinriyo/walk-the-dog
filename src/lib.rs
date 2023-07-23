@@ -80,12 +80,16 @@ fn sirpinski(context: &web_sys::CanvasRenderingContext2d,
     draw_triangle(&context, points);
 
     let depth = depth - 1;
+    let [top, left, right] = points;
     if depth > 0 {
+        let left_middle = ((top.0 + left.0) / 2.0, (top.1 + left.1) / 2.0);
+        let right_middle = ((top.0 + right.0) / 2.0, (top.1 + right.1) / 2.0);
+        let bottom_middle = (top.0, right.1);
         // draw_triangle(&context, [(300.0, 0.0), (150.00, 300.0), (450.0, 300.0)]);
         // draw_triangle(&context, [(150.0, 300.0), (0.0, 600.0), (300.0, 600.0)]);
         // draw_triangle(&context, [(450.0, 300.0), (300.0, 600.0), (600.0, 600.0)]);
-        sirpinski(&context, [(300.0, 0.0), (150.00, 300.0), (450.0, 300.0)], depth);
-        sirpinski(&context, [(150.0, 300.0), (0.0, 600.0), (300.0, 600.0)], depth);
-        sirpinski(&context, [(450.0, 300.0), (300.0, 600.0), (600.0, 600.0)], depth);
+        sirpinski(&context, [top, left_middle, right_middle], depth);
+        sirpinski(&context, [left_middle, left, bottom_middle], depth);
+        sirpinski(&context, [right_middle, bottom_middle, right], depth);
     }
 }
