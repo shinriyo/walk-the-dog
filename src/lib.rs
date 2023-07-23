@@ -1,3 +1,7 @@
+use std::fmt::format;
+
+use rand::Rng;
+use rand::thread_rng;
 use wasm_bindgen::JsCast;
 use wasm_bindgen::prelude::*;
 // use web_sys::console;
@@ -69,6 +73,9 @@ fn draw_triangle(
     context: &web_sys::CanvasRenderingContext2d,
     points: [(f64, f64); 3],
     color: (u8, u8, u8)) {
+    let color_str = format!("rgb({}, {}, {})", color.0, color.1, color.2);
+    context.set_fill_style(&wasm_bindgen::JsValue::from_str(&color_str));
+
     let [top, left, right] = points;
     context.move_to(top.0, top.1);
     context.begin_path();
@@ -76,7 +83,8 @@ fn draw_triangle(
     context.line_to(right.0, right.1);
     context.line_to(top.0, top.1);
     context.close_path();
-    context.stroke()
+    context.stroke();
+    context.fill();
 }
 
 fn sirpinski(
@@ -90,15 +98,23 @@ fn sirpinski(
     let depth = depth - 1;
     let [top, left, right] = points;
     if depth > 0 {
+        let mut rng = thread_rng();
+
+        let next_color = (
+            rng.gen_range(0..255),
+            rng.gen_range(0..255),
+            rng.gen_range(0..255),
+        );
+
         let left_middle = midpoint(top, left);
         let right_middle = midpoint(top, right);
         let bottom_middle = midpoint(left, right);
         // draw_triangle(&context, [(300.0, 0.0), (150.00, 300.0), (450.0, 300.0)]);
         // draw_triangle(&context, [(150.0, 300.0), (0.0, 600.0), (300.0, 600.0)]);
         // draw_triangle(&context, [(450.0, 300.0), (300.0, 600.0), (600.0, 600.0)]);
-        sirpinski(&context, [top, left_middle, right_middle], color, depth);
-        sirpinski(&context, [left_middle, left, bottom_middle], color, depth);
-        sirpinski(&context, [right_middle, bottom_middle, right], color, depth);
+        sirpinski(&context, [top, left_middle, right_middle], next_color, depth);
+        sirpinski(&context, [left_middle, left, bottom_middle], next_color, depth);
+        sirpinski(&context, [right_middle, bottom_middle, right], next_color, depth);
     }
 }
 
