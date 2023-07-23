@@ -56,11 +56,19 @@ pub fn main_js() -> Result<(), JsValue> {
     draw_triangle(&context, [(450.0, 300.0), (300.0, 600.0), (600.0, 600.0)]);
     */
 
-    sirpinski(&context, [(300.0, 0.0), (0.0, 600.0), (600.0, 600.0)], 5);
+    sirpinski(
+      &context,
+      [(300.0, 0.0), (0.0, 600.0), (600.0, 600.0)],
+      (0, 255, 0),
+      5
+    );
     Ok(())
 }
 
-fn draw_triangle(context: &web_sys::CanvasRenderingContext2d, points: [(f64, f64); 3]) {
+fn draw_triangle(
+    context: &web_sys::CanvasRenderingContext2d,
+    points: [(f64, f64); 3],
+    color: (u8, u8, u8)) {
     let [top, left, right] = points;
     context.move_to(top.0, top.1);
     context.begin_path();
@@ -71,13 +79,13 @@ fn draw_triangle(context: &web_sys::CanvasRenderingContext2d, points: [(f64, f64
     context.stroke()
 }
 
-fn sirpinski(context: &web_sys::CanvasRenderingContext2d,
-  points: [(f64, f64); 3], depth: u8) {
-    // draw_triangle(&context, [(300.0, 0.0), (0.0, 600.0), (600.0, 600.0)]);
-    // draw_triangle(&context, [(300.0, 0.0), (150.00, 300.0), (450.0, 300.0)]);
-    // draw_triangle(&context, [(150.0, 300.0), (0.0, 600.0), (300.0, 600.0)]);
-    // draw_triangle(&context, [(450.0, 300.0), (300.0, 600.0), (600.0, 600.0)]);
-    draw_triangle(&context, points);
+fn sirpinski(
+    context: &web_sys::CanvasRenderingContext2d,
+    points: [(f64, f64); 3],
+    color: (u8, u8, u8),
+    depth: u8
+) {
+    draw_triangle(&context, points, color);
 
     let depth = depth - 1;
     let [top, left, right] = points;
@@ -88,9 +96,9 @@ fn sirpinski(context: &web_sys::CanvasRenderingContext2d,
         // draw_triangle(&context, [(300.0, 0.0), (150.00, 300.0), (450.0, 300.0)]);
         // draw_triangle(&context, [(150.0, 300.0), (0.0, 600.0), (300.0, 600.0)]);
         // draw_triangle(&context, [(450.0, 300.0), (300.0, 600.0), (600.0, 600.0)]);
-        sirpinski(&context, [top, left_middle, right_middle], depth);
-        sirpinski(&context, [left_middle, left, bottom_middle], depth);
-        sirpinski(&context, [right_middle, bottom_middle, right], depth);
+        sirpinski(&context, [top, left_middle, right_middle], color, depth);
+        sirpinski(&context, [left_middle, left, bottom_middle], color, depth);
+        sirpinski(&context, [right_middle, bottom_middle, right], color, depth);
     }
 }
 
